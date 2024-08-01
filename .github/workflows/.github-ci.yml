@@ -10,9 +10,9 @@ jobs:
   earthly:
     runs-on: ubuntu-latest
     if: contains( github.ref, 'master')
-    container: earthly/earthly:v0.8.5
+
     steps:
-      - run: earthly bootstrap
+
       - name: Listing files
         run: |
           ls -a
@@ -20,7 +20,6 @@ jobs:
           ls -a
           cd ..
           ls -a
-      - name: Docker in Docker
-        run: earthly --ci --push -P +ci
+
 
 
