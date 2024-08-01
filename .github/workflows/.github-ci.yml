@@ -8,6 +8,8 @@ jobs:
     container: earthly/earthly:v0.8.5
     steps:
       - run: earthly bootstrap
+      - name: Move to root directory
+        run: cd ../..
       - name: Docker in Docker
         run: earthly --ci --push -P +ci
 
