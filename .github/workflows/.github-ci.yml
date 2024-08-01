@@ -9,8 +9,7 @@ jobs:
     steps:
       - run: earthly bootstrap
       - name: Listing files
-        run: |
-          ls -la
+        run: ls -a
       - name: Docker in Docker
         run: earthly --ci --push -P +ci
 
