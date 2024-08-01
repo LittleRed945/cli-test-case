@@ -19,6 +19,8 @@ jobs:
           ls -la
           cd ./cli-test-case
           ls -la
+      - name: Check for Earthfile file
+        run: (ls /Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: Docker in Docker
         run: earthly --ci --push -P +ci
 
