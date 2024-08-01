@@ -14,11 +14,11 @@ jobs:
       - run: earthly bootstrap
       - name: Listing files
         run: |
-          ls -a
+          ls -la
           cd ..
-          ls -a
-          cd ..
-          ls -a
+          ls -la
+          cd ./cli-test-case
+          ls -la
       - name: Docker in Docker
         run: earthly --ci --push -P +ci
 
