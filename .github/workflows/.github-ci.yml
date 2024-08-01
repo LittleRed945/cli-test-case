@@ -12,10 +12,7 @@ jobs:
     container: earthly/earthly:v0.8.5
     steps:
       - run: earthly bootstrap
-  run_earthly:
-    runs-on: ubuntu-latest
-    steps:
-      - run: earthly bootstrap
+      - uses: action/checkout@v3
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: Docker in Docker
