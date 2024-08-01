@@ -2,8 +2,8 @@ on:
   pull_request:
     types: [opened, reopened]
 jobs:
-  runs-on: ubuntu-latest
   earthly:
+    runs-on: ubuntu-latest
     if: contains( github.ref, 'master')
     container: earthly/earthly:v0.8.5
     steps:
