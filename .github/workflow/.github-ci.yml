@@ -1,0 +1,13 @@
+on:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  earthly:
+    if: contains( github.ref, 'master')
+    container: earthly/earthly:v0.8.5
+    steps:
+      - run: earthly bootstrap
+      - name: Docker in Docker
+        run: earthly --ci --push -P +ci
+
+
