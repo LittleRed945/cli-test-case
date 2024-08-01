@@ -1,6 +1,3 @@
-# on:
-#   pull_request:
-#     types: [opened, reopened]
 jobs:
   earthly:
     runs-on: ubuntu-latest
