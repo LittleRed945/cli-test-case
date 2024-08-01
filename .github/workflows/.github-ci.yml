@@ -10,11 +10,11 @@ jobs:
       - run: earthly bootstrap
       - name: Listing files
         run: |
-        ls -a
-        cd ..
-        ls -a
-        cd ..
-        ls -a
+          ls -a
+          cd ..
+          ls -a
+          cd ..
+          ls -a
       - name: Docker in Docker
         run: earthly --ci --push -P +ci
 
