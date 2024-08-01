@@ -19,8 +19,8 @@ jobs:
           ls -la
           cd ./cli-test-case
           ls -la
-      - name: Check for Earthfile file
-        run: (ls /Earthfile && echo Found Earthfile) || (echo No Earthfile)
+      - name: Check for docker-compose file
+        run: (ls /docker-compose && echo Found docker-compose) || (echo No docker-compose)
       - name: Docker in Docker
         run: earthly --ci --push -P +ci
 
