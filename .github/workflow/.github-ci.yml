@@ -2,6 +2,7 @@ on:
   pull_request:
     types: [opened, reopened]
 jobs:
+  runs-on: ubuntu-latest
   earthly:
     if: contains( github.ref, 'master')
     container: earthly/earthly:v0.8.5
