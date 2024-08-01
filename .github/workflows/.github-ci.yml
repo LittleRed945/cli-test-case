@@ -14,11 +14,11 @@ jobs:
       - run: earthly bootstrap
       - name: Listing files
         run: |
-          ls -la
+          ls Earthfile
           cd ..
-          ls -la
-          cd ./cli-test-case
-          ls -la
+          ls Earthfile
+          cd ..
+          ls Earthfile
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: Docker in Docker
