@@ -17,12 +17,6 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: earthly 
         run: earthly --ci --push -P +ci
-  go_test_coverage_check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-      
       - name: generate test coverage
         run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
 
@@ -48,4 +42,7 @@ jobs:
           ## ideally this should be orphan branch (see below how to create this branch)
           git-branch: badges 
 
+
+      
+     
           
