@@ -18,6 +18,7 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: earthly 
         run: earthly --ci --push -P +ci
+      - run: ls -la
       - name: check test coverage
         uses: vladopajic/go-test-coverage@v2
         with:
