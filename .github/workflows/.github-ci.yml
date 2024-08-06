@@ -7,12 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      
   earthly:
     runs-on: ubuntu-latest
     container: earthly/earthly:v0.8.5
     steps:
       - run: earthly bootstrap
       - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: earthly 
