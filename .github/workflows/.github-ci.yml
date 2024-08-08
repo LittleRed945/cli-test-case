@@ -23,7 +23,6 @@ jobs:
       - name: earthly 
         run: echo "earthly --ci --push -P +ci=$(earthly --ci --push -P +ci)\n" >> $GITHUB_OUTPUT
         id: run_earthly_tests
-      - name: Slack Notification
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
