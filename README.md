@@ -1,1 +1,1 @@
-![coverage](https://raw.githubusercontent.com/org/project/badges/.badges/main/coverage.svg)
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
