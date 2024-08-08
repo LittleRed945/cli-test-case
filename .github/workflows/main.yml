@@ -16,10 +16,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest" # or pin to an specific version, e.g. "0.8.1"
       - uses: actions/checkout@v2
-      - run: earthly bootstrap
+      - run:  echo "boot=$(earthly bootstrap)\n" >> $GITHUB_OUTPUT
+        id: bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
-        run: echo "cc=$(ls -la)\n" >> $GITHUB_OUTPUT
+        run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
       - name: earthly 
         run: echo "earthly=$(earthly --ci --push -P +ci)\n" >> $GITHUB_OUTPUT
@@ -27,7 +28,7 @@ jobs:
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{steps.check.outputs.cc}}
+          text: ${{steps.bootstrap.outputs.boot}}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
