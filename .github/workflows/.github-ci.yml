@@ -33,4 +33,10 @@ jobs:
         with:
           name: Build
           path: "**/*.html"
-     
+      - name: Coverage badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage
+          ICON: 'coverage (gitlab)'
+          STATUS: ${{ steps.regex-match.outputs.match }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
