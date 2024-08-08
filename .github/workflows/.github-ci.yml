@@ -16,18 +16,27 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest" # or pin to an specific version, e.g. "0.8.1"
       - uses: actions/checkout@v2
-      - name: what version is installed?
-        run: earthly --version
-      - name: run the earthly hello world
-        run: earthly github.com/earthly/hello-world:main+hello
       - run: earthly bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
       - name: earthly 
-        run: earthly --ci --push -P +ci
-      - run: ls -la
+        run: echo "earthly --ci --push -P +ci=$(earthly --ci --push -P +ci)\n" >> $GITHUB_OUTPUT
+        id: run_earthly_tests
+      - name: Slack Notification
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ steps.run_tests.outputs.* }}
+          regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
           name: Build
           path: "**/*.html"
+      - name: Coverage badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage
+          ICON: 'coverage (gitlab)'
+          STATUS: ${{ steps.regex-match.outputs.match }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
