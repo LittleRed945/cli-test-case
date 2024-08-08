@@ -10,8 +10,16 @@ jobs:
       
   earthly:
     runs-on: ubuntu-latest
-    container: earthly/earthly:v0.8.5
     steps:
+      - uses: earthly/actions-setup@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: "latest" # or pin to an specific version, e.g. "0.8.1"
+      - uses: actions/checkout@v2
+      - name: what version is installed?
+        run: earthly --version
+      - name: run the earthly hello world
+        run: earthly github.com/earthly/hello-world:main+hello
       - run: earthly bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
@@ -19,28 +27,7 @@ jobs:
       - name: earthly 
         run: earthly --ci --push -P +ci
       - run: ls -la
-      - name: check test coverage
-        uses: vladopajic/go-test-coverage@v2
+      - uses: actions/upload-artifact@v3
         with:
-    
-          
-          # Configure action by specifying input parameters individually (option 2).
-          # If you are using config file (option 1) you shouldn't use these parameters, however
-          # specifing these action parameters will override appropriate config values.
-          profile: coverage_result.html
-          local-prefix: github.com/org/project
-          threshold-file: 80
-          threshold-package: 80
-          threshold-total: 95
-          
-          ## when token is not specified (value '') this feature is turned off
-          ## in this example badge is created and committed only for main branch
-          git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
-          ## name of branch where badges are stored
-          ## ideally this should be orphan branch (see below how to create this branch)
-          git-branch: badges 
-
-
-      
-     
-          
+          name: Build
+          path: **/*.html
