@@ -19,14 +19,15 @@ jobs:
       - run: earthly bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
-        run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
+        run: echo "earthly=$((ls Earthfile && echo Found Earthfile) || (echo No Earthfile))\n" >> $GITHUB_OUTPUT
+        id: check
       - name: earthly 
         run: echo "earthly=$(earthly --ci --push -P +ci)\n" >> $GITHUB_OUTPUT
         id: run_earthly_tests
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{steps.run_earthly_tests.outputs.*}}
+          text: ${{steps.check.outputs.*}}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
