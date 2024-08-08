@@ -26,7 +26,7 @@ jobs:
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{join(steps.run_earthly_tests.outputs.*, '\n')}}
+          text: ${{steps.run_earthly_tests.outputs.*}}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
