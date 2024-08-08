@@ -36,6 +36,6 @@ jobs:
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: coverage
-          ICON: 'coverage (gitlab)'
+          ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
           STATUS: ${{ steps.regex-match.outputs.match }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
