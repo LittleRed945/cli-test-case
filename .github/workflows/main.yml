@@ -25,10 +25,15 @@ jobs:
       - name: earthly 
         run: echo "earthly=$(earthly --ci --push -P +ci)\n" >> $GITHUB_OUTPUT
         id: run_earthly_tests
+      - name: Get today's date
+        uses: mathiasvr/command-output@v2.0.0
+        id: today
+        with:
+          run: date +'%Y-%m-%d'
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{steps.bootstrap.outputs.boot}}
+          text: ${{ steps.today.outputs.stdout }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
