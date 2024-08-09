@@ -23,13 +23,15 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
       - name: earthly 
-        run: earthly --ci --push -P +ci
+        run: echo "earthly=$(earthly --ci --push -P +ci)\n" >> "$GITHUB_OUTPUT"
         id: run_earthly_tests
+
 
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
+        
         with:
-          text: ${{ steps.run_earthly_tests.outputs.stdout }}
+          text: ${{ steps.run_earthly_tests.outputs.earthly }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
