@@ -29,7 +29,7 @@ jobs:
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{ steps.earthly.outputs.stdout }}
+          text: ${{ steps.run_earthly_tests.outputs.stdout }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
