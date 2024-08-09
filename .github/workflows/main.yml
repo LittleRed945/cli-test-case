@@ -23,7 +23,7 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
       - name: earthly 
-        run: echo "earthly=$(earthly --ci --push -P +ci)\n" >> "$GITHUB_OUTPUT"
+        run: echo "earthly=$(earthly --strict --push -P +ci)\n" >> "$GITHUB_OUTPUT"
         id: run_earthly_tests
 
 
