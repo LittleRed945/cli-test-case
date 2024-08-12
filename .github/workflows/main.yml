@@ -27,7 +27,7 @@ jobs:
         id: earthly
         run: |
           OUTPUT=$(earthly --ci --push -P +ci)  
-          echo "Earthly output: $OUTPUT"
+          echo "Earthly output132"
           MATCHED_STRING=$(echo "$OUTPUT" | grep -oP '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)')  
           echo "matched_string=$MATCHED_STRING" >> $GITHUB_OUTPUT
 
