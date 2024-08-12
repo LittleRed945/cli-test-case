@@ -27,9 +27,9 @@ jobs:
         run:  echo "hello=$(ls Earthfile)\n" >> "$GITHUB_OUTPUT"
         id: echo_test
       - name: earthly 
-        run: echo "earthly=$(earthly --strict --push -P +ci)\n" >> "$GITHUB_OUTPUT"
+        run: echo "earthly=$(earthly --strict --output --push -P +ci)\n" >> "$GITHUB_OUTPUT"
         id: run_earthly_tests
-
+      - run: ls -la
 
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
