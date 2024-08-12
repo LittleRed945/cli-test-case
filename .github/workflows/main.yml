@@ -23,21 +23,17 @@ jobs:
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
-      - name: test hello world text
-        run:  echo "hello=$(ls Earthfile)\n" >> "$GITHUB_OUTPUT"
-        id: echo_test
-      - name: earthly 
-        run: echo "earthly=$(earthly --strict --output --push -P +ci)\n" >> "$GITHUB_OUTPUT"
-        id: run_earthly_tests
+      - name: Run Earthly and capture output
+        id: earthly
+        run: |
+          OUTPUT=$(earthly --ci --output --push -P +ci)  
+          echo "Earthly output: $OUTPUT"
+          MATCHED_STRING=$(echo "$OUTPUT" | grep -oP '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)')  
+          echo "::set-output name=matched_string::$MATCHED_STRING"
+
       - run: ls -la
       - run: echo "coverage_result=$(<coverage_result.html )" >> "$GITHUB_OUTPUT"
         id: coverage_result
-      - uses: actions-ecosystem/action-regex-match@v2
-        id: regex-match2
-        
-        with:
-          text: ${{ steps.coverage_result.outputs.coverage_result }}
-          regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         
@@ -45,16 +41,13 @@ jobs:
           text: ${{ steps.run_earthly_tests.outputs.* }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build
-          path: "**/*.html"
+      
       - name: Coverage badge
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: coverage
           ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
-          STATUS: ${{ steps.regex-match2.outputs.match }}
+          STATUS: ${{ steps.earthly.outputs.matched_string }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
