@@ -24,7 +24,7 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
       - name: test hello world text
-        run:  echo "hello=$(ls)\n" >> "$GITHUB_OUTPUT"
+        run:  echo "hello=$(ls Earthfile)\n" >> "$GITHUB_OUTPUT"
         id: echo_test
       - name: earthly 
         run: echo "earthly=$(earthly --strict --push -P +ci)\n" >> "$GITHUB_OUTPUT"
