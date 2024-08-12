@@ -16,15 +16,16 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest" # or pin to an specific version, e.g. "0.8.1"
       - uses: actions/checkout@v2
-      - name: test hello world text
-        run:  echo "hello=hello world" >> "$GITHUB_OUTPUT"
-        id: echo_test
+      
       - run:  echo "boot=$(earthly bootstrap)\n" >> $GITHUB_OUTPUT
         id: bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
+      - name: test hello world text
+        run:  echo "hello=$(ls)\n" >> "$GITHUB_OUTPUT"
+        id: echo_test
       - name: earthly 
         run: echo "earthly=$(earthly --strict --push -P +ci)\n" >> "$GITHUB_OUTPUT"
         id: run_earthly_tests
