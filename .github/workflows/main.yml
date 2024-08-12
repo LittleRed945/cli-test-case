@@ -31,7 +31,7 @@ jobs:
         id: regex-match
         
         with:
-          text: ${{ steps.run_earthly_tests.outputs.earthly }}
+          text: ${{ steps.bootstrap.outputs.boot }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions/upload-artifact@v3
         with:
