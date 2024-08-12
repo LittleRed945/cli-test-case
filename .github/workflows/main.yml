@@ -30,13 +30,21 @@ jobs:
         run: echo "earthly=$(earthly --strict --output --push -P +ci)\n" >> "$GITHUB_OUTPUT"
         id: run_earthly_tests
       - run: ls -la
-
+      - run: echo "coverage_result=$(<coverage_result.html )" >> "$GITHUB_OUTPUT"
+        id: coverage_result
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match2
+        
+        with:
+          text: ${{ steps.coverage_result.outputs.coverage_result }}
+          regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         
         with:
-          text: ${{ steps.run_earthly_tests.outputs.earthly }}
+          text: ${{ steps.run_earthly_tests.outputs.* }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
+      
       - uses: actions/upload-artifact@v3
         with:
           name: Build
@@ -46,7 +54,7 @@ jobs:
         with:
           NAME: coverage
           ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
-          STATUS: ${{ steps.regex-match.outputs.match }}
+          STATUS: ${{ steps.regex-match2.outputs.match }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
