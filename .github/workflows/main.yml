@@ -23,31 +23,25 @@ jobs:
       - name: Check for Earthfile file
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
+
       - name: Run Earthly and capture output
         id: earthly
         run: |
-          OUTPUT=$(earthly --ci --push -P +ci)  
-          echo "Earthly output132"
-          MATCHED_STRING=$(echo "$OUTPUT" | grep -oP '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)')  
-          echo "matched_string=$MATCHED_STRING" >> $GITHUB_OUTPUT
+          OUTPUT=$(earthly --ci --output --push -P +ci)  
+          echo "earthly=$OUTPUT" >> "$GITHUB_OUTPUT"
 
-      - run: ls -la
-      - run: echo "coverage_result=$(<coverage_result.html )" >> "$GITHUB_OUTPUT"
-        id: coverage_result
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
-        
         with:
-          text: ${{ steps.run_earthly_tests.outputs.* }}
+          text: ${{ steps.earthly.outputs.matched_string }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
-      
-      
+
       - name: Coverage badge
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: coverage
           ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
-          STATUS: ${{ steps.earthly.outputs.matched_string }}
+          STATUS: ${{ steps.regex-match.outputs.match }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
