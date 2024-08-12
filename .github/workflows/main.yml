@@ -26,10 +26,10 @@ jobs:
       - name: Run Earthly and capture output
         id: earthly
         run: |
-          OUTPUT=$(earthly --ci --output --push -P +ci)  
+          OUTPUT=$(earthly --ci --push -P +ci)  
           echo "Earthly output: $OUTPUT"
           MATCHED_STRING=$(echo "$OUTPUT" | grep -oP '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)')  
-          echo "::set-output name=matched_string::$MATCHED_STRING"
+          echo "matched_string=$MATCHED_STRING" >> $GITHUB_OUTPUT
 
       - run: ls -la
       - run: echo "coverage_result=$(<coverage_result.html )" >> "$GITHUB_OUTPUT"
