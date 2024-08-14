@@ -2,11 +2,11 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  checkout:
-    name: Checkout
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
+  # checkout:
+  #   name: Checkout
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@master
       
   earthly:
     runs-on: ubuntu-latest
@@ -26,14 +26,25 @@ jobs:
 
       - name: Run Earthly and capture output
         id: earthly
+        run: earthly --ci --output --push -P +ci
+
+      - name: Install htmlq
         run: |
-          OUTPUT=$(earthly --ci --output --push -P +ci)  
-          echo "earthly=$OUTPUT" >> "$GITHUB_OUTPUT"
+          sudo apt-get install -y htmlq
+
+      - name: Extract coverage data from HTML
+        run: |
+          COVERAGE=$(htmlq 'tr:last-child td:last-child' -t coverage_result.html)
+          echo "Total Coverage: $COVERAGE"
+
+      - name: Save Coverage to GitHub Actions output
+        id: save_coverage
+        run: echo "total_coverage=$COVERAGE" >> $GITHUB_OUTPUT
 
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{ steps.earthly.outputs.matched_string }}
+          text: ${{ steps.save_coverage.outputs.total_coverage }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
 
       - name: Coverage badge
