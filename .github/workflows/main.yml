@@ -37,10 +37,10 @@ jobs:
         id: earthly
         run: earthly --ci --output --push -P +ci
 
-      - name: Extract coverage data from HTML
+      - name: Run htmlq with Docker
         run: |
+          docker run -v $PWD:/workdir -w /workdir ghcr.io/mgdm/htmlq:latest \
           COVERAGE=$(htmlq 'tr:last-child td:last-child' -t coverage_result.html)
-          echo "Total Coverage: $COVERAGE"
 
       - name: Save Coverage to GitHub Actions output
         id: save_coverage
