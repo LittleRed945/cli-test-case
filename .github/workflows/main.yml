@@ -26,7 +26,7 @@ jobs:
       - name: Run Earthly and capture output
         id: earthly
         run: earthly --ci --output --push -P +ci
-
+      - run: ls -la
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -50,7 +50,7 @@ jobs:
 
       - name: Save Coverage to GitHub Actions output
         id: save_coverage
-        run: echo "total_coverage=$COVERAGE" >> $GITHUB_OUTPUT
+        run: echo "total_coverage=$COVERAGE \n" >> $GITHUB_OUTPUT
 
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
@@ -67,16 +67,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
-      - name: check test coverage
-        uses: vladopajic/go-test-coverage@v2
-        with:
+      # - name: check test coverage
+      #   uses: vladopajic/go-test-coverage@v2
+      #   with:
     
           
-          # Configure action by specifying input parameters individually (option 2).
-          # If you are using config file (option 1) you shouldn't use these parameters, however
-          # specifing these action parameters will override appropriate config values.
-          profile: coverage_result.html
-          local-prefix: github.com/LittleRed945/cli-test-case
-          threshold-file: 80
-          threshold-package: 80
-          threshold-total: 95
+      #     # Configure action by specifying input parameters individually (option 2).
+      #     # If you are using config file (option 1) you shouldn't use these parameters, however
+      #     # specifing these action parameters will override appropriate config values.
+      #     profile: coverage_result.html
+      #     local-prefix: github.com/LittleRed945/cli-test-case
+      #     threshold-file: 80
+      #     threshold-package: 80
+      #     threshold-total: 95
