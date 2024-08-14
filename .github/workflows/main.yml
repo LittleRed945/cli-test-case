@@ -23,16 +23,6 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
 
-      - name: Install Homebrew
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential curl file git
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-      - name: Install htmlq
-        run: |
-          brew install htmlq
-
       - name: Run Earthly and capture output
         id: earthly
         run: earthly --ci --output --push -P +ci
