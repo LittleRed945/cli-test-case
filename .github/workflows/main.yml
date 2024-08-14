@@ -27,35 +27,16 @@ jobs:
         id: earthly
         run: earthly --ci --output --push -P +ci
       - run: ls -la
-      - name: Install dependencies
+      
+      - name: Save Coverage Summary to Output
         run: |
-          sudo apt-get update
-          sudo apt-get install -y curl git gcc make libssl-dev pkg-config
-
-      - name: Install Rust and Cargo
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-
-      - name: Clone and build htmlq
-        run: |
-          git clone https://github.com/mgdm/htmlq.git
-          cd htmlq
-          cargo build --release
-          sudo cp target/release/htmlq /usr/local/bin/
-
-      - name: Run htmlq 
-        run: |
-          COVERAGE=$(htmlq 'tr:last-child td:last-child' -t coverage_result.html)
-
-      - name: Save Coverage to GitHub Actions output
-        id: save_coverage
-        run: echo "total_coverage=$COVERAGE \n" >> $GITHUB_OUTPUT
-
+          # 将 coverage_summary.txt 的内容写入到 $GITHUB_OUTPUT
+          echo "coverage_summary=$(cat coverage_summary.txt)" >> $GITHUB_OUTPUT
+        id: save_coverage_summary
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{ steps.save_coverage.outputs.total_coverage }}
+          text: ${{ steps.save_coverage_summary.outputs.coverage_summary }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
 
       - name: Coverage badge
