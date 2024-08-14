@@ -16,7 +16,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest" # or pin to an specific version, e.g. "0.8.1"
       - uses: actions/checkout@v2
-      
       - run:  echo "boot=$(earthly bootstrap)\n" >> $GITHUB_OUTPUT
         id: bootstrap
       - uses: actions/checkout@v3
@@ -24,13 +23,19 @@ jobs:
         run: (ls Earthfile && echo Found Earthfile) || (echo No Earthfile)
         id: check
 
-      - name: Run Earthly and capture output
-        id: earthly
-        run: earthly --ci --output --push -P +ci
+      - name: Install Homebrew
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential curl file git
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       - name: Install htmlq
         run: |
-          sudo apt-get install -y htmlq
+          brew install htmlq
+
+      - name: Run Earthly and capture output
+        id: earthly
+        run: earthly --ci --output --push -P +ci
 
       - name: Extract coverage data from HTML
         run: |
