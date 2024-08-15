@@ -27,7 +27,7 @@ jobs:
         id: earthly
         run: |
           output=$(earthly --ci --push -P +ci 2>&1 | grep "total:" | sed 's/.*)\s*//')
-          echo "output=$output" >> $GITHUB_OUTPUT
+          echo "coverage=${output%?}" >> $GITHUB_OUTPUT
           
       - run: ls -la
       # - name: Code Coverage Summary
@@ -47,13 +47,14 @@ jobs:
       #   with:
       #     text: ${{ steps.earthly.outputs.earthly_output }}
       #     regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
-      - run: echo ${{ steps.earthly.outputs.output }}
-      - name: Coverage badge
+      - run: echo ${{ steps.earthly.outputs.coverage }}
+      - name: Create coverage badge
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: coverage
-          ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
-          STATUS: ${{ steps.earthly.outputs.earthly_output }}
+          LABEL: 'Coverage'
+          STATUS: ${{ steps.earthly.outputs.coverage }}
+          COLOR: green
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
