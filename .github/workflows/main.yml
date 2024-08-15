@@ -16,7 +16,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest" # or pin to an specific version, e.g. "0.8.1"
       - uses: actions/checkout@v2
-      - run:  echo "boot=$(earthly bootstrap)\n" >> $GITHUB_OUTPUT
+      - run:  echo "boot=$(earthly bootstrap 2>&1)\n" >> $GITHUB_OUTPUT
         id: bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
@@ -25,7 +25,9 @@ jobs:
 
       - name: Run Earthly and capture output
         id: earthly
-        run: echo "earthly_output=$(earthly --ci --output --push -P +ci 2>&1)">>GITHUB_OUTPUT
+        run: |
+          output=$(earthly --ci --output --push -P +ci 2>&1 | grep "total:" | sed 's/.*)\s*//') 
+          echo "earthly_output=$output">>GITHUB_OUTPUT
       - run: ls -la
       # - name: Code Coverage Summary
       #   uses: irongut/CodeCoverageSummary@v2
