@@ -16,7 +16,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           version: "latest" # or pin to an specific version, e.g. "0.8.1"
       - uses: actions/checkout@v2
-      - run:  echo "boot=$(earthly bootstrap 2>&1)\n" >> $GITHUB_OUTPUT
+      - run:  echo "boot=$(earthly bootstrap 2>&1 |  grep "buildkitd" )\n" >> $GITHUB_OUTPUT
         id: bootstrap
       - uses: actions/checkout@v3
       - name: Check for Earthfile file
