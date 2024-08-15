@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Earthly and capture output
         id: earthly
-        run: earthly --ci --output --push -P +ci | tee earthly_output.log
+        run: earthly --ci --output --push -P +ci 2>&1| tee earthly_output.log
       - run: ls -la
       # - name: Code Coverage Summary
       #   uses: irongut/CodeCoverageSummary@v2
