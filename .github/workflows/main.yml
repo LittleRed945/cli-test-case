@@ -27,13 +27,13 @@ jobs:
         id: earthly
         run: earthly --ci --output --push -P +ci | tee earthly_output.log
       - run: ls -la
-       - name: Code Coverage Summary
-      uses: irongut/CodeCoverageSummary@v2
-      with:
-        filename: earthly_output.log
-        badge-title: Coverage
-        coverage-regex: "\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)"
-        output: both
+      - name: Code Coverage Summary
+        uses: irongut/CodeCoverageSummary@v2
+        with:
+          filename: earthly_output.log
+          badge-title: Coverage
+          coverage-regex: "\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)"
+          output: both
       # - name: Save Coverage Summary to Output
       #   run: |
       #     # 将 coverage_summary.txt 的内容写入到 $GITHUB_OUTPUT
