@@ -26,8 +26,8 @@ jobs:
       - name: Run Earthly and capture output
         id: earthly
         run: |
-          echo "output=$(earthly --ci --push -P +ci 2>&1 | tee /dev/tty | grep 'total:' | sed 's/.*)\s*//')"
-          echo "earthly_output=$output" >> GITHUB_OUTPUT
+          output=$(earthly --ci --push -P +ci 2>&1 | grep "total:" | sed 's/.*)\s*//')
+          echo "output=$output" >> $GITHUB_OUTPUT
           
       - run: ls -la
       # - name: Code Coverage Summary
@@ -47,7 +47,7 @@ jobs:
       #   with:
       #     text: ${{ steps.earthly.outputs.earthly_output }}
       #     regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
-      - run: echo ${{ steps.earthly.outputs.earthly_output }}
+      - run: echo ${{ steps.earthly.outputs.output }}
       - name: Coverage badge
         uses: RubbaBoy/BYOB@v1.3.0
         with:
