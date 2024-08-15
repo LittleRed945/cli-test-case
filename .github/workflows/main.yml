@@ -46,7 +46,7 @@ jobs:
       #   with:
       #     text: ${{ steps.earthly.outputs.earthly_output }}
       #     regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
-
+      - run: echo ${{ steps.earthly.outputs.earthly_output }}
       - name: Coverage badge
         uses: RubbaBoy/BYOB@v1.3.0
         with:
