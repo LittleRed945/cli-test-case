@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Earthly and capture output
         id: earthly
-        run: echo "earthly_output=$(earthly --ci --output --push -P +ci 2>&1)" >> $GITHUB_OUTPUT
+        run: echo "earthly_output=$(earthly --ci --output --push -P +ci 2>&1)| tee earthly_output.log
       - run: ls -la
       # - name: Code Coverage Summary
       #   uses: irongut/CodeCoverageSummary@v2
@@ -34,15 +34,15 @@ jobs:
       #     badge-title: Coverage
       #     coverage-regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
       #     output: both
-      # - name: Save Coverage Summary to Output
-      #   run: |
-      #     # 将 coverage_summary.log 的内容写入到 $GITHUB_OUTPUT
-      #     echo "coverage_summary=$(cat coverage_summary.log)" >> $GITHUB_OUTPUT
-      #   id: save_coverage_summary
+      - name: Save Coverage Summary to Output
+        run: |
+          # 将 coverage_summary.log 的内容写入到 $GITHUB_OUTPUT
+          echo "coverage_summary=$(cat earthly_output.log)" >> $GITHUB_OUTPUT
+        id: save_coverage_summary
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
-          text: ${{ steps.earthly.outputs.earthly_output }}
+          text: ${{ steps.save_coverage_summary.outputs.coverage_summary }}
           regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
 
       - name: Coverage badge
