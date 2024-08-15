@@ -27,31 +27,31 @@ jobs:
         id: earthly
         run: earthly --ci --output --push -P +ci | tee earthly_output.log
       - run: ls -la
-      - name: Code Coverage Summary
-        uses: irongut/CodeCoverageSummary@v2
+      # - name: Code Coverage Summary
+      #   uses: irongut/CodeCoverageSummary@v2
+      #   with:
+      #     filename: earthly_output.log
+      #     badge-title: Coverage
+      #     coverage-regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
+      #     output: both
+      - name: Save Coverage Summary to Output
+        run: |
+          # 将 coverage_summary.log 的内容写入到 $GITHUB_OUTPUT
+          echo "coverage_summary=$(cat coverage_summary.log)" >> $GITHUB_OUTPUT
+        id: save_coverage_summary
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
         with:
-          filename: earthly_output.log
-          badge-title: Coverage
-          coverage-regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
-          output: both
-      # - name: Save Coverage Summary to Output
-      #   run: |
-      #     # 将 coverage_summary.txt 的内容写入到 $GITHUB_OUTPUT
-      #     echo "coverage_summary=$(cat coverage_summary.txt)" >> $GITHUB_OUTPUT
-      #   id: save_coverage_summary
-      # - uses: actions-ecosystem/action-regex-match@v2
-      #   id: regex-match
-      #   with:
-      #     text: ${{ steps.save_coverage_summary.outputs.coverage_summary }}
-      #     regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
+          text: ${{ steps.save_coverage_summary.outputs.coverage_summary }}
+          regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
 
-      # - name: Coverage badge
-      #   uses: RubbaBoy/BYOB@v1.3.0
-      #   with:
-      #     NAME: coverage
-      #     ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
-      #     STATUS: ${{ steps.regex-match.outputs.match }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Coverage badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage
+          ICON: 'https://badgen.net/codecov/c/gitlab/gitlab-org/gitaly'
+          STATUS: ${{ steps.regex-match.outputs.match }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
 
       # - name: check test coverage
