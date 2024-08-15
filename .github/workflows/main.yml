@@ -32,7 +32,7 @@ jobs:
         with:
           filename: earthly_output.log
           badge-title: Coverage
-          coverage-regex: "\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)"
+          coverage-regex: '\(statements\)(?:\s+)?(\d+(?:\.\d+)?%)'
           output: both
       # - name: Save Coverage Summary to Output
       #   run: |
