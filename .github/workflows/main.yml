@@ -27,7 +27,7 @@ jobs:
         id: earthly
         run: |
           output=$(earthly --ci --push -P +ci 2>&1 | grep "total:" | sed 's/.*)\s*//')
-          echo "coverage=${output%?}" >> $GITHUB_OUTPUT
+          echo "coverage=$output" >> $GITHUB_OUTPUT
           
       - run: ls -la
       # - name: Code Coverage Summary
