@@ -26,8 +26,8 @@ jobs:
       - name: Run Earthly and capture output
         id: earthly
         run: |
-          output=$(earthly --ci --output --push -P +ci 2>&1 | grep "total:" | sed 's/.*)\s*//') 
-          echo "earthly_output=$output">>GITHUB_OUTPUT
+          output=$(earthly --ci --push -P +ci 2>&1 ) 
+          
       - run: ls -la
       # - name: Code Coverage Summary
       #   uses: irongut/CodeCoverageSummary@v2
