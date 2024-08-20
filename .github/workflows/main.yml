@@ -35,11 +35,26 @@ jobs:
           coverage=$(echo "$output" | grep "total:" | sed 's/.*)\s*//')
           echo "coverage=$coverage" >> $GITHUB_OUTPUT
 
-      - name: Create coverage badge
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: coverage
-          LABEL: 'Coverage'
-          STATUS: ${{ steps.earthly.outputs.coverage }}
-          COLOR: green
+      - name: Update README.md with coverage badge
+        env:
+          COVERAGE_PERCENTAGE: ${{ steps.earthly.outputs.coverage }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Generate new badge URL
+          BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE_PERCENTAGE}%25-brightgreen"
+
+          # Fetch the current README.md content
+          README_CONTENT=$(curl -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3.raw" \
+            -s https://raw.githubusercontent.com/${{ github.repository }}/main/README.md)
+
+          # Update README.md content
+          UPDATED_README_CONTENT=$(echo "$README_CONTENT" | sed "s|!\[Coverage\](https://img.shields.io/badge/coverage-[0-9]*%25-brightgreen)|![Coverage]($BADGE_URL)|")
+
+          # Commit and push the updated README.md
+          echo "$UPDATED_README_CONTENT" > README.md
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add README.md
+          git commit --amend --no-edit 
+          git push origin master
